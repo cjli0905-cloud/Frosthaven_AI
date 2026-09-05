@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Frosthaven AI 隊友</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <!-- 修復 1：強制不換行 (white-space: nowrap) -->
+      <div style="display: flex; align-items: center; white-space: nowrap;">
+        <span style="font-size: 1.2em; font-weight: bold;" id="character-name-display">HP: </span>
+        <button id="btn-hp-minus" class="secondary" style="margin-left: 10px;">-</button>
+        <span id="hp-display" style="font-size: 1.5em; margin: 0 10px;">10 / 10</span>
+        <button id="btn-hp-plus" class="secondary">+</button>
+      </div>
+      <div>
+        <button id="btn-settings" class="secondary" style="padding: 10px; margin-right: 5px;">⚙️ 設定</button>
+        <!-- 修復 2：拔除橘色與簡化文字 -->
+        <button id="btn-state-drawer" class="secondary" style="padding: 10px;">手牌管理</button>
+      </div>
+    </div>
+    <div id="class-mechanics-container" style="margin-top: 10px;"></div>
+  </div>
+
+  <div class="panel">
+    <h3>戰況輸入與行動方針</h3>
+    
+    <!-- 修復 3：雙行排版異常狀態 -->
+    <div class="negative-label">▼ 負面狀態 (Negative)</div>
+    <div class="conditions-grid">
+      <label><input type="checkbox" id="cond-wound"><div class="cond-zh">流血</div><div class="cond-en">Wound</div></label>
+      <label><input type="checkbox" id="cond-poison"><div class="cond-zh">中毒</div><div class="cond-en">Poison</div></label>
+      <label><input type="checkbox" id="cond-disarm"><div class="cond-zh">繳械</div><div class="cond-en">Disarm</div></label>
+      <label><input type="checkbox" id="cond-immobilize"><div class="cond-zh">定身</div><div class="cond-en">Immobilize</div></label>
+      <label><input type="checkbox" id="cond-stun"><div class="cond-zh">暈眩</div><div class="cond-en">Stun</div></label>
+      <label><input type="checkbox" id="cond-bane"><div class="cond-zh">禍殃</div><div class="cond-en">Bane</div></label>
+      <label><input type="checkbox" id="cond-muddle"><div class="cond-zh">混亂</div><div class="cond-en">Muddle</div></label>
+      <label><input type="checkbox" id="cond-brittle"><div class="cond-zh">脆弱</div><div class="cond-en">Brittle</div></label>
+    </div>
+    
+    <div class="positive-label">▲ 正面狀態 (Positive)</div>
+    <div class="conditions-grid">
+      <label><input type="checkbox" id="cond-invisible"><div class="cond-zh">隱形</div><div class="cond-en">Invisible</div></label>
+      <label><input type="checkbox" id="cond-strengthen"><div class="cond-zh">強化</div><div class="cond-en">Strengthen</div></label>
+      <label><input type="checkbox" id="cond-ward"><div class="cond-zh">防護</div><div class="cond-en">Ward</div></label>
+      <label><input type="checkbox" id="cond-regenerate"><div class="cond-zh">再生</div><div class="cond-en">Regenerate</div></label>
+    </div>
+
+    <!-- 修復 4：一鍵輪盤切換元素 -->
+    <div class="positive-label" style="color: #ff9800; margin-top: 20px;">◆ 戰場元素狀態 (Elements)</div>
+    <div class="elements-grid">
+      <button id="btn-el-fire" class="element-btn inert">🔥 火 <span class="el-state">惰性</span></button>
+      <button id="btn-el-ice" class="element-btn inert">❄️ 冰 <span class="el-state">惰性</span></button>
+      <button id="btn-el-air" class="element-btn inert">🌪️ 風 <span class="el-state">惰性</span></button>
+      <button id="btn-el-earth" class="element-btn inert">🍃 土 <span class="el-state">惰性</span></button>
+      <button id="btn-el-light" class="element-btn inert">☀️ 光 <span class="el-state">惰性</span></button>
+      <button id="btn-el-dark" class="element-btn inert">🌑 暗 <span class="el-state">惰性</span></button>
+    </div>
+
+    <label style="display: block; margin-top: 15px;">你的行動方針 (自然語言):</label>
+    <input type="text" id="player-directive" placeholder="例如：打爆前面那隻，盡量回血">
+    <label style="display: block; margin-bottom: 10px;">
+      <input type="checkbox" id="flag-can-rest"> 戰況寬裕，可視情況休整
+    </label>
+    <label>設定 Gemini API Key:</label>
+    <input type="password" id="api-key" value="" placeholder="貼上你的 API Key">
+    
+    <label style="display: block; margin-top: 10px;">選擇 AI 思考引擎:</label>
+    <select id="ai-model-select" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #555; background: #333; color: white;">
+      <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (推演極快，適合常規回合)</option>
+      <option value="gemini-3.5-flash">Gemini 3.5 (深度思考，適合複雜殘局)</option>
+    </select>
+
+    <button id="btn-ask-ai" style="width: 100%; font-size: 1.2em; padding: 15px; margin: 10px 0 0 0;">請 AI 決策</button>
+  </div>
+
+  <div class="panel hidden" id="result-panel">
+    <h3>AI 推薦決策 <span id="initiative-display" style="color: #ff9800; font-size: 0.9em;"></span></h3>
+    <div class="card-display" id="cards-container"></div>
+    <div id="decision-reasoning" class="reasoning-box"></div>
+    <pre id="raw-json-output" style="background:#111; padding:10px; margin-top: 15px; font-size: 0.8em; overflow-x: auto; color: #888;"></pre>
+  </div>
+
+  <div id="state-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; overflow-y: auto; padding: 20px 0;">
+    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
+      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h2 style="margin: 0; color: #ff9800;">手牌狀態管理</h2>
+          <div>
+            <!-- 新增攜帶管理按鈕 -->
+            <button id="btn-open-deck-builder" style="margin: 0; margin-right: 8px; background: #4dabf7; color: #000; font-size: 0.85em; padding: 8px 12px;">攜帶管理</button>
+            <button id="btn-close-modal" class="secondary" style="margin: 0; font-size: 0.85em; padding: 8px 12px;">關閉</button>
+          </div>
+        </div>
+        <div class="zone-container"><div class="zone-title">🟩 手牌庫 (Hand)</div><div id="zone-hand"></div></div>
+        <div class="zone-container"><div class="zone-title"><span>🟦 持續效果區 (Active Buffs)</span><button id="btn-recover-active" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-active"></div></div>
+        <div class="zone-container"><div class="zone-title"><span>🟨 棄牌堆 (Discard)</span><button id="btn-recover-discard" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-discard"></div></div>
+        <div class="zone-container"><div class="zone-title"><span>🟥 流失區 (Lost)</span><button id="btn-recover-lost" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-lost"></div></div>
+        <!-- 已經刪除 zone-pool 區塊 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增：攜帶卡牌管理 (Deck Builder) 彈出視窗 -->
+  <div id="deck-builder-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1050; overflow-y: auto; padding: 20px 0;">
+    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
+      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h2 style="margin: 0; color: #4dabf7;">攜帶卡牌管理</h2>
+          <button id="btn-close-deck-builder" class="secondary" style="margin: 0;">完成</button>
+        </div>
+        <div id="deck-limit-counter" style="text-align: center; font-size: 1.1em; font-weight: bold; margin-bottom: 15px; background: #1a1a1a; padding: 10px; border-radius: 8px; color: #fff;">
+          已選攜帶: 0 / 12
+        </div>
+        <div id="deck-builder-grid" class="deck-grid">
+          <!-- JS 動態生成按鈕 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; overflow-y: auto; padding: 20px 0;">
+    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
+      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h2 style="margin: 0; color: #fff;">⚙️ 系統設定</h2>
+          <button id="btn-close-settings" class="secondary" style="margin: 0;">關閉</button>
+        </div>
+
+        <!-- 角色切換選單與觸發函數 -->
+        <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #2a2e39; margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 10px; font-size: 0.9em; font-weight: bold; color: #4CAF50;">🔄 切換操作角色</label>
+          <select id="character-select" style="width: 100%; padding: 8px; background: #222; color: #fff; border-radius: 4px;">
+            <option value="drifter">Drifter (流浪者)</option>
+            <option value="blinkblade">Blinkblade (閃刃)</option>
+          </select>
+          <button onclick="switchCharacter()" style="width: 100%; margin-top: 10px; background: #4CAF50; color: white;">確認切換並重載</button>
+        </div>
+        <script>
+          function switchCharacter() {
+          // 【新增】切換前，強制將當前畫面狀態寫入該角色的專屬暫存檔
+            if (typeof window.forceAutoSave === 'function') {
+              window.forceAutoSave();
+            }
+            const selected = document.getElementById('character-select').value;
+            window.location.href = window.location.pathname + '?class=' + selected;
+          }
+        </script>
+
+
+        <h3 style="margin-top: 15px; color: #4CAF50;">戰局存檔管理</h3>
+        <p style="font-size: 0.85em; color: #8b92a5; margin-bottom: 15px;">系統會在每次點擊「請 AI 決策」時自動暫存。您也可手動匯出以便跨裝置遊玩。</p>
+        <button id="btn-export-save" style="width: 100%; margin-bottom: 15px; background: #4dabf7; color: #000;">⬇️ 匯出戰局 (Export JSON)</button>
+        <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #2a2e39;">
+          <label style="display: block; margin-bottom: 10px; font-size: 0.9em; font-weight: bold; color: #ff9800;">⬆️ 載入戰局 (Import JSON)</label>
+          <input type="file" id="import-file" accept=".json" style="width: 100%; margin-bottom: 10px; color: #fff;">
+          <button id="btn-import-save" class="secondary" style="width: 100%;">確認載入</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 動態腳本載入區 -->
+  <script>
+    // 1. 取得網址參數，預設為 drifter
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentClass = urlParams.get('class') || 'drifter';
+
+    // 2. 讓下拉選單預設選中當前網址參數的角色
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectElement = document.getElementById('character-select');
+      if (selectElement) selectElement.value = currentClass;
+    });
+
+    // 3. 使用安全的字串拼接 (</scr + ipt>)，徹底消滅跳脫字元導致的載入崩潰
+    document.write('<script src="js/config/' + currentClass + 'Cards.js"></scr' + 'ipt>');
+    document.write('<script src="js/config/' + currentClass + 'Config.js"></scr' + 'ipt>');
+    document.write('<script src="js/ui/' + currentClass + 'UI.js"></scr' + 'ipt>');
+    
+    // 4. 載入通用核心
+    document.write('<script src="js/core/geminiClient.js"></scr' + 'ipt>');
+    document.write('<script src="js/core/promptEngine.js"></scr' + 'ipt>');
+    document.write('<script src="js/ui/renderInput.js"></scr' + 'ipt>');
+  </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+/* css/style.css */
+
+:root {
+  --bg-color: #0f1115;
+  --panel-bg: #1a1d24;
+  --panel-border: #2a2e39;
+  --text-main: #e0e0e0;
+  --text-muted: #8b92a5;
+  --primary: #4CAF50;
+  --primary-hover: #45a049;
+  --secondary: #3a3f4b;
+  --secondary-hover: #4b5162;
+  --accent: #ff9800;
+  --danger: #ff5252;
+  --positive: #4dabf7;
+  --negative: #ff6b6b;
+  --border-radius: 8px;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 12px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h2, h3, h4 { margin-top: 0; color: #fff; }
+h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--panel-border); padding-bottom: 8px;}
+
+/* 隱藏屬性 (確保權重最高) */
+.hidden { display: none !important; }
+
+/* === 版面與容器 === */
+.panel {
+  background-color: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* === 按鈕與輸入框 (Touch-friendly) === */
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background-color 0.2s;
+}
+button:hover { background-color: var(--primary-hover); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+button.secondary { background-color: var(--secondary); }
+button.secondary:hover { background-color: var(--secondary-hover); }
+
+input[type="text"], input[type="password"], select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border);
+  background: #121419;
+  color: white;
+  box-sizing: border-box;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+/* === 戰況異常狀態網格 (一排 4 個，雙行字體) === */
+.negative-label { color: var(--negative); font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; }
+.positive-label { color: var(--positive); font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; }
+
+.conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.conditions-grid label {
+  background: var(--secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 2px;
+  min-height: 44px;
+  border: 1px solid transparent;
+}
+
+/* 隱藏原生勾選框 */
+.conditions-grid input[type="checkbox"] {
+  display: none;
+}
+
+/* 負面狀態選取變色 (深紅底、紅框、紅字) */
+.negative-label + .conditions-grid label:has(input:checked) {
+  background-color: #3b1f1f;
+  border-color: var(--danger);
+}
+.negative-label + .conditions-grid label:has(input:checked) .cond-zh,
+.negative-label + .conditions-grid label:has(input:checked) .cond-en {
+  color: var(--negative);
+}
+
+/* 正面狀態選取變色 (深藍底、藍框、藍字) */
+.positive-label + .conditions-grid label:has(input:checked) {
+  background-color: #1a2e3f;
+  border-color: var(--positive);
+}
+.positive-label + .conditions-grid label:has(input:checked) .cond-zh,
+.positive-label + .conditions-grid label:has(input:checked) .cond-en {
+  color: var(--positive);
+}
+
+.conditions-grid label:active { background: var(--secondary-hover); }
+.cond-zh { font-size: 0.85em; font-weight: bold; }
+.cond-en { font-size: 0.65em; color: #999; }
+
+/* === 戰場元素狀態網格 (一排 3 個) === */
+.elements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.element-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.element-btn.inert { background: #2d2d2d; color: #777; }
+.element-btn.waning { background: #8B6508; color: #fff; }
+.element-btn.strong { background: #ff9800; color: #fff; box-shadow: 0 0 8px rgba(255, 152, 0, 0.5); }
+.el-state { font-size: 0.8em; opacity: 0.9; }
+
+/* === 角色專屬機制 (Tracker) 樣式 === */
+.tracker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--secondary);
+  padding: 10px 14px;
+  margin-top: 8px;
+  border-radius: 6px;
+}
+.tracker-name { font-size: 0.95rem; font-weight: bold; }
+.tracker-controls { display: flex; align-items: center; }
+.tracker-controls button {
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  margin: 0 8px;
+  background: #555;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.tracker-warning { color: var(--danger); font-weight: bold; }
+
+/* === AI 決策卡牌展示 === */
+.card-display { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+.card-slot {
+  background: #121419;
+  border-left: 5px solid var(--primary);
+  padding: 14px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+.reasoning-box {
+  background: var(--secondary);
+  padding: 14px;
+  border-radius: 6px;
+  font-style: italic;
+  margin-top: 15px;
+  color: #c5cbe3;
+  border-left: 3px solid var(--accent);
+}
+
+/* === 全域狀態同步面板與設定面板 === */
+.modal-content {
+  background: var(--panel-bg);
+  padding: 20px;
+  border-radius: 12px;
+  width: 92%;
+  max-width: 500px;
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+}
+.zone-container {
+  margin-bottom: 16px;
+  background: #121419;
+  padding: 12px;
+  border-radius: 8px;
+}
+.zone-title {
+  font-weight: bold;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 6px;
+  color: var(--accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mini-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--secondary);
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+.mini-card select {
+  width: auto;
+  margin: 0;
+  padding: 6px 30px 6px 10px;
+  min-height: 36px;
+  background-color: var(--bg-color);
+}
+
+/* === 攜帶卡牌管理 (Deck Builder) === */
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.deck-card-btn {
+  background: var(--secondary);
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 12px 8px;
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.deck-card-btn.selected {
+  background: #1a2e3f;
+  border-color: var(--positive);
+  color: var(--text-main);
+  box-shadow: 0 0 8px rgba(77, 171, 247, 0.3);
+}
+.deck-card-btn .lvl { font-size: 0.85em; font-weight: bold; color: var(--accent); }
+.deck-card-btn .name { font-size: 0.95em; font-weight: bold; }
+.deck-card-btn .init { font-size: 0.75em; opacity: 0.7; }
+.limit-warning { color: var(--danger) !important; }
