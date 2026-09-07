@@ -5,36 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Frosthaven AI 隊友</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .hidden { display: none !important; }
-  </style>
 </head>
 <body>
   <div class="panel">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <!-- 修復 1：強制不換行 (white-space: nowrap) -->
-      <div style="display: flex; align-items: center; white-space: nowrap;">
-        <button id="btn-open-char-modal" class="secondary" style="font-size: 1.1em; font-weight: bold; padding: 6px 12px; margin-right: 10px; border-radius: 6px; border: 1px solid #666; background: #222; color: #fff;">
+    <div class="top-bar-container">
+      <div class="char-hp-group">
+        <button id="btn-open-char-modal" class="secondary char-select-btn">
           <span id="character-name-display">Player</span>
         </button>
-        <span style="font-size: 1.2em; font-weight: bold;">HP: </span>
+        <span class="hp-label">HP: </span>
         <button id="btn-hp-minus" class="secondary">-</button>
-        <span id="hp-display" style="font-size: 1.5em; margin: 0 10px;">10 / 10</span>
+        <span id="hp-display" class="hp-value">10 / 10</span>
         <button id="btn-hp-plus" class="secondary">+</button>
       </div>
       <div>
-        <button id="btn-settings" class="secondary" style="padding: 10px; margin-right: 5px;">⚙️ 設定</button>
-        <!-- 修復 2：拔除橘色與簡化文字 -->
-        <button id="btn-state-drawer" class="secondary" style="padding: 10px;">手牌管理</button>
+        <button id="btn-settings" class="secondary action-btn">⚙️ 設定</button>
+        <button id="btn-state-drawer" class="secondary action-btn-no-margin">手牌管理</button>
       </div>
     </div>
-    <div id="class-mechanics-container" style="margin-top: 10px;"></div>
+    <div id="class-mechanics-container" class="mechanics-container"></div>
   </div>
 
   <div class="panel">
     <h3>戰況輸入與行動方針</h3>
     
-    <!-- 修復 3：雙行排版異常狀態 -->
     <div class="negative-label">▼ 負面狀態 (Negative)</div>
     <div class="conditions-grid">
       <label><input type="checkbox" id="cond-wound"><div class="cond-zh">流血</div><div class="cond-en">Wound</div></label>
@@ -55,8 +49,7 @@
       <label><input type="checkbox" id="cond-regenerate"><div class="cond-zh">再生</div><div class="cond-en">Regenerate</div></label>
     </div>
 
-    <!-- 修復 4：一鍵輪盤切換元素 -->
-    <div class="positive-label" style="color: #ff9800; margin-top: 20px;">◆ 戰場元素狀態 (Elements)</div>
+    <div class="elements-title">◆ 戰場元素狀態 (Elements)</div>
     <div class="elements-grid">
       <button id="btn-el-fire" class="element-btn inert">🔥 火 <span class="el-state">惰性</span></button>
       <button id="btn-el-ice" class="element-btn inert">❄️ 冰 <span class="el-state">惰性</span></button>
@@ -66,132 +59,125 @@
       <button id="btn-el-dark" class="element-btn inert">🌑 暗 <span class="el-state">惰性</span></button>
     </div>
 
-    <label style="display: block; margin-top: 15px;">你的行動方針 (自然語言):</label>
+    <label class="form-group-label">你的行動方針 (自然語言):</label>
     <input type="text" id="player-directive" placeholder="例如：打爆前面那隻，盡量回血">
-    <label style="display: block; margin-bottom: 10px;">
+    
+    <label class="form-checkbox-label">
       <input type="checkbox" id="flag-can-rest"> 戰況寬裕，可視情況休整
     </label>
+    
     <label>設定 Gemini API Key:</label>
     <input type="password" id="api-key" value="" placeholder="貼上你的 API Key">
     
-    <label style="display: block; margin-top: 10px;">選擇 AI 思考引擎:</label>
-    <select id="ai-model-select" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #555; background: #333; color: white;">
+    <label class="form-group-label-small">選擇 AI 思考引擎:</label>
+    <select id="ai-model-select" class="custom-select">
       <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (推演極快，適合常規回合)</option>
       <option value="gemini-3.5-flash">Gemini 3.5 (深度思考，適合複雜殘局)</option>
     </select>
 
-    <button id="btn-ask-ai" style="width: 100%; font-size: 1.2em; padding: 15px; margin: 10px 0 0 0;">請 AI 決策</button>
+    <button id="btn-ask-ai" class="btn-large-primary">請 AI 決策</button>
   </div>
 
   <div class="panel hidden" id="result-panel">
-    <h3>AI 推薦決策 <span id="initiative-display" style="color: #ff9800; font-size: 0.9em;"></span></h3>
+    <h3>AI 推薦決策 <span id="initiative-display" class="initiative-text"></span></h3>
     <div class="card-display" id="cards-container"></div>
     <div id="decision-reasoning" class="reasoning-box"></div>
-    <pre id="raw-json-output" style="background:#111; padding:10px; margin-top: 15px; font-size: 0.8em; overflow-x: auto; color: #888;"></pre>
+    <pre id="raw-json-output" class="raw-json-box"></pre>
   </div>
 
-  <div id="state-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; overflow-y: auto; padding: 20px 0;">
-    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
-      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="margin: 0; color: #ff9800;">手牌狀態管理</h2>
+  <!-- 手牌狀態管理 -->
+  <div id="state-modal" class="modal-overlay hidden">
+    <div class="modal-scroll-container">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-warning">手牌狀態管理</h2>
           <div>
-            <!-- 新增攜帶管理按鈕 -->
-            <button id="btn-open-deck-builder" style="margin: 0; margin-right: 8px; background: #4dabf7; color: #000; font-size: 0.85em; padding: 8px 12px;">攜帶管理</button>
-            <button id="btn-close-modal" class="secondary" style="margin: 0; font-size: 0.85em; padding: 8px 12px;">關閉</button>
+            <button id="btn-open-deck-builder" class="btn-info-sm">攜帶管理</button>
+            <button id="btn-close-modal" class="secondary btn-secondary-sm">關閉</button>
           </div>
         </div>
         <div class="zone-container"><div class="zone-title">🟩 手牌庫 (Hand)</div><div id="zone-hand"></div></div>
-        <div class="zone-container"><div class="zone-title"><span>🟦 持續效果區 (Active Buffs)</span><button id="btn-recover-active" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-active"></div></div>
-        <div class="zone-container"><div class="zone-title"><span>🟨 棄牌堆 (Discard)</span><button id="btn-recover-discard" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-discard"></div></div>
-        <div class="zone-container"><div class="zone-title"><span>🟥 流失區 (Lost)</span><button id="btn-recover-lost" class="secondary" style="font-size: 0.8em; padding: 4px 8px; margin: 0;">一鍵收回</button></div><div id="zone-lost"></div></div>
-        <!-- 已經刪除 zone-pool 區塊 -->
+        <div class="zone-container"><div class="zone-title"><span>🟦 持續效果區 (Active Buffs)</span><button id="btn-recover-active" class="secondary btn-recover">一鍵收回</button></div><div id="zone-active"></div></div>
+        <div class="zone-container"><div class="zone-title"><span>🟨 棄牌堆 (Discard)</span><button id="btn-recover-discard" class="secondary btn-recover">一鍵收回</button></div><div id="zone-discard"></div></div>
+        <div class="zone-container"><div class="zone-title"><span>🟥 流失區 (Lost)</span><button id="btn-recover-lost" class="secondary btn-recover">一鍵收回</button></div><div id="zone-lost"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- 新增：攜帶卡牌管理 (Deck Builder) 彈出視窗 -->
-  <div id="deck-builder-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1050; overflow-y: auto; padding: 20px 0;">
-    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
-      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="margin: 0; color: #4dabf7;">攜帶卡牌管理</h2>
-          <button id="btn-close-deck-builder" class="secondary" style="margin: 0;">完成</button>
+  <!-- 攜帶卡牌管理 -->
+  <div id="deck-builder-modal" class="modal-overlay-dark hidden">
+    <div class="modal-scroll-container">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-info">攜帶卡牌管理</h2>
+          <button id="btn-close-deck-builder" class="secondary no-margin">完成</button>
         </div>
-        <div id="deck-limit-counter" style="text-align: center; font-size: 1.1em; font-weight: bold; margin-bottom: 15px; background: #1a1a1a; padding: 10px; border-radius: 8px; color: #fff;">
+        <div id="deck-limit-counter" class="deck-limit-box">
           已選攜帶: 0 / 12
         </div>
-        <div id="deck-builder-grid" class="deck-grid">
-          <!-- JS 動態生成按鈕 -->
-        </div>
+        <div id="deck-builder-grid" class="deck-grid"></div>
       </div>
     </div>
   </div>
 
-  <div id="settings-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; overflow-y: auto; padding: 20px 0;">
-    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100%;">
-      <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 95%; max-width: 500px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h2 style="margin: 0; color: #fff;">⚙️ 系統設定</h2>
-          <button id="btn-close-settings" class="secondary" style="margin: 0;">關閉</button>
+  <!-- 系統設定 -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-scroll-container">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title text-white">⚙️ 系統設定</h2>
+          <button id="btn-close-settings" class="secondary no-margin">關閉</button>
         </div>
 
-        <!-- 【新增】最大血量設定區塊 -->
-        <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #2a2e39; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-          <label style="font-size: 0.9em; font-weight: bold; color: #ff9800; margin: 0;">❤️ 最大血量 (Max HP)</label>
-          <input type="number" id="input-max-hp" value="10" min="1" max="99" style="width: 80px; margin: 0; text-align: center; font-size: 1.1em; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 6px;">
+        <div class="settings-card settings-row">
+          <label class="settings-label text-warning">❤️ 最大血量 (Max HP)</label>
+          <input type="number" id="input-max-hp" value="10" min="1" max="99" class="settings-input-number">
         </div>        
-        <h3 style="margin-top: 15px; color: #4CAF50;">戰局存檔管理</h3>
-        <p style="font-size: 0.85em; color: #8b92a5; margin-bottom: 15px;">系統會在每次點擊「請 AI 決策」時自動暫存。您也可手動匯出以便跨裝置遊玩。</p>
-        <button id="btn-export-save" style="width: 100%; margin-bottom: 15px; background: #4dabf7; color: #000;">⬇️ 匯出戰局 (Export JSON)</button>
-        <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #2a2e39;">
-          <label style="display: block; margin-bottom: 10px; font-size: 0.9em; font-weight: bold; color: #ff9800;">⬆️ 載入戰局 (Import JSON)</label>
-          <input type="file" id="import-file" accept=".json" style="width: 100%; margin-bottom: 10px; color: #fff;">
-          <button id="btn-import-save" class="secondary" style="width: 100%;">確認載入</button>
+        
+        <h3 class="settings-section-title">戰局存檔管理</h3>
+        <p class="text-muted-small">系統會在每次點擊「請 AI 決策」時自動暫存。您也可手動匯出以便跨裝置遊玩。</p>
+        <button id="btn-export-save" class="btn-export">⬇️ 匯出戰局 (Export JSON)</button>
+        
+        <div class="settings-card">
+          <label class="settings-label text-warning d-block mb-10">⬆️ 載入戰局 (Import JSON)</label>
+          <input type="file" id="import-file" accept=".json" class="file-input">
+          <button id="btn-import-save" class="secondary w-100">確認載入</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 新增：2x2 角色快速切換視窗 -->
-  <div id="character-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1100; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px);">
-    <div class="modal-content" style="background: #2d2d2d; padding: 20px; border-radius: 10px; width: 90%; max-width: 350px; border: 1px solid #4a4a4a;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #4CAF50;">🔄 切換操作角色</h2>
-        <button id="btn-close-char-modal" class="secondary" style="margin: 0;">關閉</button>
+  <!-- 角色快速切換視窗 -->
+  <div id="character-modal" class="modal-overlay-centered hidden">
+    <div class="modal-content char-modal-box">
+      <div class="modal-header mb-20">
+        <h2 class="modal-title text-success">🔄 切換操作角色</h2>
+        <button id="btn-close-char-modal" class="secondary no-margin">關閉</button>
       </div>
       
-      <!-- 2x2 網格 -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-        <button onclick="switchCharacter('drifter')" id="char-btn-drifter" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Drifter<br><small style="font-weight: normal; opacity: 0.8;">流浪者</small></button>
-        <button onclick="switchCharacter('blinkblade')" id="char-btn-blinkblade" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Blinkblade<br><small style="font-weight: normal; opacity: 0.8;">閃刃</small></button>
-        <button onclick="switchCharacter('geminate')" id="char-btn-geminate" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Geminate<br><small style="font-weight: normal; opacity: 0.8;">雙生體</small></button>
-        <!-- 預留空位 -->
-        <button onclick="switchCharacter('deathwalker')" id="char-btn-deathwalker" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Deathwalker<br><small style="font-weight: normal; opacity: 0.8;">死靈行者</small></button>
-	
+      <div class="char-grid">
+        <button onclick="switchCharacter('drifter')" id="char-btn-drifter" class="char-btn">Drifter<span class="char-btn-sub">流浪者</span></button>
+        <button onclick="switchCharacter('blinkblade')" id="char-btn-blinkblade" class="char-btn">Blinkblade<span class="char-btn-sub">閃刃</span></button>
+        <button onclick="switchCharacter('geminate')" id="char-btn-geminate" class="char-btn">Geminate<span class="char-btn-sub">雙生體</span></button>
+        <button onclick="switchCharacter('deathwalker')" id="char-btn-deathwalker" class="char-btn">Deathwalker<span class="char-btn-sub">死靈行者</span></button>
       </div>
     </div>
   </div>
 
 <!-- 動態腳本載入區 -->
   <script>
-    // 1. 取得網址參數，預設為 drifter
     const urlParams = new URLSearchParams(window.location.search);
     const currentClass = urlParams.get('class') || 'drifter';
 
-    // 2. DOM 載入後綁定按鈕與狀態
     document.addEventListener('DOMContentLoaded', () => {
-      // 標示當前選擇的角色按鈕
+      // 透過 class 來控制當前選擇按鈕的樣式，取代原本雜亂的行內 style
       const activeBtn = document.getElementById('char-btn-' + currentClass);
       if (activeBtn) {
-        activeBtn.style.border = '2px solid #4CAF50';
-        activeBtn.style.background = '#292929';
-        activeBtn.style.color = '#fff';
-        activeBtn.disabled = true; // 禁用當前按鈕防止誤觸
-        // activeBtn.innerHTML += '<div style="font-size: 0.7em; color: #4CAF50; margin-top: 5px;">📍 當前選擇</div>';
+        activeBtn.classList.add('active-char');
+        activeBtn.disabled = true; 
+        // activeBtn.innerHTML += '<div class="active-char-indicator">📍 當前選擇</div>';
       }
 
-      // 綁定視窗開關
       const btnOpenChar = document.getElementById('btn-open-char-modal');
       const charModal = document.getElementById('character-modal');
       const btnCloseChar = document.getElementById('btn-close-char-modal');
@@ -201,7 +187,6 @@
       if (charModal) charModal.addEventListener('click', (e) => { if (e.target === charModal) charModal.classList.add('hidden'); });
     });
 
-    // 獨立的切換函數 (直接吃 class 參數)
     function switchCharacter(selectedClass) {
       if (typeof window.forceAutoSave === 'function') {
         window.forceAutoSave();
@@ -209,12 +194,10 @@
       window.location.href = window.location.pathname + '?class=' + selectedClass;
     }
 
-    // 3. 使用安全的字串拼接 (</scr + ipt>)，徹底消滅跳脫字元導致的載入崩潰
     document.write('<script src="js/config/' + currentClass + 'Cards.js"></scr' + 'ipt>');
     document.write('<script src="js/config/' + currentClass + 'Config.js"></scr' + 'ipt>');
     document.write('<script src="js/ui/' + currentClass + 'UI.js"></scr' + 'ipt>');
     
-    // 4. 載入通用核心
     document.write('<script src="js/core/geminiClient.js"></scr' + 'ipt>');
     document.write('<script src="js/core/promptEngine.js"></scr' + 'ipt>');
     document.write('<script src="js/ui/renderInput.js"></scr' + 'ipt>');
