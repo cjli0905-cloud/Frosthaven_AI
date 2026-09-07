@@ -36,8 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnImportSave = document.getElementById('btn-import-save');
   const importFile = document.getElementById('import-file');
   
+  // 替換原本的 const maxHp = 10;
   let currentHp = 10;
-  const maxHp = 10;
+  let maxHp = 10; 
+  const inputMaxHp = document.getElementById('input-max-hp');
+
+  if (inputMaxHp) {
+    inputMaxHp.addEventListener('change', (e) => {
+      let newVal = parseInt(e.target.value, 10);
+      if (isNaN(newVal) || newVal < 1) newVal = 1;
+      maxHp = newVal;
+      // 若當前血量超過新設定的上限，自動往下修正
+      if (currentHp > maxHp) currentHp = maxHp; 
+      updateHpDisplay();
+      if (typeof window.forceAutoSave === 'function') window.forceAutoSave();
+    });
+  }
   let cardState = {};
   
   // === 元素輪盤狀態管理 ===
@@ -200,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function createSaveData() {
     return {
       hp: currentHp,
+      maxHp: maxHp, // 【新增】讓最大血量跟著角色存檔
       cardState: cardState,
       pluginData: window.getRawPluginState ? window.getRawPluginState() : {}
     };
@@ -212,6 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function loadSaveData(data) {
+    // 【新增】優先讀取最大血量並同步更新畫面輸入框
+    if (data.maxHp !== undefined) {
+      maxHp = data.maxHp;
+      if (inputMaxHp) inputMaxHp.value = maxHp;
+    }
+    
     if (data.hp !== undefined) currentHp = data.hp;
     
     // 防呆合併邏輯
