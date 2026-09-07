@@ -55,7 +55,7 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
     }
   }
   const activeConditionsText = activeConditionRules.length > 0 
-    ? `\n  6. 當前異常狀態權衡 (【極度重要】目前處於以下狀態)：\n     ${activeConditionRules.join("\n     ")}` 
+    ? `當前異常狀態權衡 (【極度重要】目前處於以下狀態)：\n     ${activeConditionRules.join("\n     ")}` 
     : "";
 
   // 3. 【全職業通用決策提示】
@@ -69,7 +69,7 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
      - 【單次爆發流失卡】(is_lost: true 且 is_persistent: false)：前期 (手牌 >= 8) 嚴禁使用，除非能帶來決定性戰略優勢。
      - 【持續效果 Buff 卡】(is_lost: true 且 is_persistent: true)：【強烈鼓勵】在遊戲前期優先打出 1~2 張來建立核心 Buff！不要因為它們會流失就捨不得用，這是角色發揮戰力的關鍵。
   4. 遠程攻擊劣勢 (Ranged Disadvantage)：【極度重要】除非沒有其他選擇，否則請盡力避免使用遠程攻擊 (Ranged Attack) 打擊相鄰 (距離 1) 的敵人，因為這會導致劣勢。若玩家方針指定目標距離為 1，請優先挑選近戰攻擊 (Melee Attack)，或者先安排移動 (Move) 拉開距離後再進行遠程攻擊。 (唯一例外：處於混亂狀態時，可忽略此規則，因為無論如何都處劣勢。)
-  5. 主動隱形戰術 (Invisibility Timing)：如果卡牌的行動能為自己附加隱形 (Invisible) 狀態，代表行動後將處於絕對安全。此時請優先搭配【先攻值極低 (數字小、行動快)】的卡牌，藉此搶先在怪物攻擊前行動並進入隱形，完美規避傷害。${activeConditionsText}
+  5. 主動隱形戰術 (Invisibility Timing)：如果卡牌的行動能為自己附加隱形 (Invisible) 狀態，代表行動後將處於絕對安全。此時請優先搭配【先攻值極低 (數字小、行動快)】的卡牌，藉此搶先在怪物攻擊前行動並進入隱形，完美規避傷害。
   6. 持續效果連動 (Active Buffs Synergy)：【極度重要】請務必檢查上方的【當前持續效果區 (Active Buffs)】陣列。這裡列出的卡牌代表你當下正享有的常駐增益（無論該職業是否有實體指示物/刻度）。請精準以"is_persistent": true來判斷是該卡牌的上半部還是下半部為常駐增益的確切內容。決策時，請務必將這些常駐增益的加成一併納入考量，極大化你的戰術優勢。
   `;
 
@@ -90,12 +90,14 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
 當前持續效果區 (Active Buffs): ${JSON.stringify(activeBuffs, null, 2)}
 當前可用裝備: ${JSON.stringify(readyItems)}
 場上元素狀態: ${JSON.stringify(gameState.battlefield.elements)}
+專屬機制狀態: ${JSON.stringify(gameState.character.class_mechanics)}
 
 【玩家方針與戰略目標】
 玩家自然語言方針: "${gameState.battlefield.turn_input.player_directive}"
 允許系統建議休整: ${canRest}
 
 ${genericHeuristics}
+${activeConditionsText}
 
 ${classHeuristics}
 

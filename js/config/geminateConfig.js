@@ -44,9 +44,9 @@ window.characterConfig = {
     "type": "GEMINATE_FORM_SWITCH",
     "description": "提醒玩家本回合的形態狀態，以及回合結束後是否發生形態轉換。",
     "fields": {
-      "starting_form": "Melee 或 Ranged (對應回合開始時的形態)",
-      "ending_form": "Melee 或 Ranged (若使用了 is_transform: true 的卡牌，則會變成另一形態)",
-      "note": "簡述維持或切換形態的戰術權衡"
+      "starting_form": "原始型態：Melee 或 Ranged (對應回合開始時的形態)",
+      "ending_form": "結束型態：Melee 或 Ranged (若使用了 is_transform: true 的卡牌，則會變成另一形態)",
+      "note": "請極度精簡（限 10 字以內）簡述維持或切換形態的戰術權衡"
     }
   }
 };
