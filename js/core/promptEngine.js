@@ -26,12 +26,12 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
     if (!cardIds) return [];
     return cardIds.map(cardId => {
       const cardData = cardsDatabase.find(c => c.id === cardId);
-      return cardData ? {
-        name: cardData.name,
-        initiative: cardData.initiative,
-        top: cardData.top,
-        bottom: cardData.bottom
-      } : null;
+      if (!cardData) return null;
+      
+      // 動態解法：將 level 抽離，其餘所有欄位 (包含未來擴充的專屬標籤) 全部打包進 details
+      const { level, ...details } = cardData;
+      
+      return details;
     }).filter(c => c !== null);
   }
 
