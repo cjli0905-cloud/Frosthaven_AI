@@ -6,15 +6,15 @@ window.characterConfig = {
   "hand_limit": 10,
 
 
-  // 新增：Blinkblade 的科技感深藍色系
+  // 修改：Blinkblade 的時間行者明亮青綠/科技湖水色系
   "theme": {
-    "--bg-color": "#0b121c",
-    "--panel-bg": "#152030",
-    "--panel-border": "#21334c",
-    "--primary": "#4dabf7",
-    "--primary-hover": "#228be6",
-    "--secondary": "#243752",
-    "--secondary-hover": "#344d70"
+    "--bg-color": "#0d2633",         /* 提亮後的深青色背景 */
+    "--panel-bg": "#15384c",         /* 帶有明顯湖水綠調的面板 */
+    "--panel-border": "#285d7d",     /* 科技感的青色邊框 */
+    "--primary": "#0e9ec9",          /* 你指定的核心青/亮湖水藍 */
+    "--primary-hover": "#25bbf0",    /* 更明亮的青色懸停，強化發光感 */
+    "--secondary": "#1f4a63",        /* 偏青色的次要按鈕 */
+    "--secondary-hover": "#2d6687"   /* 提亮後的青灰色懸停 */
   },
   
   "ui_modules": {

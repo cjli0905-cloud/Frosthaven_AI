@@ -4,15 +4,15 @@ window.characterConfig = {
   "class_name": "Drifter",
   "hand_limit": 12,
 
-  // 新增：Drifter 專屬色系 (灰褐/咖啡)
+  // Drifter 專屬色系 (灰褐/咖啡大地色系)
   "theme": {
-    "--bg-color": "#1c1a18",
-    "--panel-bg": "#2b2725",
-    "--panel-border": "#4a433d",
-    "--primary": "#8d6e63",
-    "--primary-hover": "#6d4c41",
-    "--secondary": "#3e3833",
-    "--secondary-hover": "#544c45"
+    "--bg-color": "#1c1a18",         /* 極深的大地黑褐背景 */
+    "--panel-bg": "#2b2725",         /* 沉穩的暗灰咖啡面板 */
+    "--panel-border": "#4a433d",     /* 粗曠的皮革泥褐邊框 */
+    "--primary": "#8d6e63",          /* Drifter 標誌性的暖棕咖啡主色 */
+    "--primary-hover": "#6d4c41",    /* 較深實的暖咖啡色懸停 */
+    "--secondary": "#3e3833",        /* 深灰褐次要按鈕 */
+    "--secondary-hover": "#544c45"   /* 略亮的泥灰色懸停 */
   },
 
   
