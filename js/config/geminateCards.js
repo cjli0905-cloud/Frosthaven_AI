@@ -176,7 +176,7 @@ window.cardsDatabase = [
     "id": "geminate_151",
     "name": "Icebound Quills",
     "level": "1",
-    "form": "ranged",
+    "form": "melee",
     "initiative": 14,
     "top": {
       "summary": "近戰攻擊 5，穿透 (Pierce) 1。你可以選擇消耗 冰元素 (Ice)：獲得 +1 攻擊力與 +1 穿透 (Pierce)。【此行動流失】",
