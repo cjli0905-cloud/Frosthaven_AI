@@ -14,10 +14,10 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <!-- 修復 1：強制不換行 (white-space: nowrap) -->
       <div style="display: flex; align-items: center; white-space: nowrap;">
-        <!-- 將原本的 span 替換為 button，並加入 id="btn-open-char-modal" -->
         <button id="btn-open-char-modal" class="secondary" style="font-size: 1.1em; font-weight: bold; padding: 6px 12px; margin-right: 10px; border-radius: 6px; border: 1px solid #666; background: #222; color: #fff;">
-          <span id="character-name-display">HP: </span>
+          <span id="character-name-display">Player</span>
         </button>
+        <span style="font-size: 1.2em; font-weight: bold;">HP: </span>
         <button id="btn-hp-minus" class="secondary">-</button>
         <span id="hp-display" style="font-size: 1.5em; margin: 0 10px;">10 / 10</span>
         <button id="btn-hp-plus" class="secondary">+</button>
@@ -166,8 +166,9 @@
         <button onclick="switchCharacter('drifter')" id="char-btn-drifter" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Drifter<br><small style="font-weight: normal; opacity: 0.8;">流浪者</small></button>
         <button onclick="switchCharacter('blinkblade')" id="char-btn-blinkblade" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Blinkblade<br><small style="font-weight: normal; opacity: 0.8;">閃刃</small></button>
         <button onclick="switchCharacter('geminate')" id="char-btn-geminate" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Geminate<br><small style="font-weight: normal; opacity: 0.8;">雙生體</small></button>
-        <!-- 第四個預留空位 -->
-        <button onclick="switchCharacter('deathwalker')" id="char-btn-deathwalker" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em; opacity: 0.5;">Deathwalker<br><small style="font-weight: normal; opacity: 0.8;">(敬請期待)</small></button>
+        <!-- 預留空位 
+        <button onclick="switchCharacter('deathwalker')" id="char-btn-deathwalker" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Deathwalker<br><small style="font-weight: normal; opacity: 0.8;">死靈行者</small></button>
+	-->
       </div>
     </div>
   </div>
