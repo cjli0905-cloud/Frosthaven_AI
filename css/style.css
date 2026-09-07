@@ -30,7 +30,7 @@ body {
 h2, h3, h4 { margin-top: 0; color: #fff; }
 h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--panel-border); padding-bottom: 8px;}
 
-/* 隱藏屬性 (確保權重最高) */
+/* 隱藏屬性 */
 .hidden { display: none !important; }
 
 /* === 版面與容器 === */
@@ -43,7 +43,16 @@ h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 1px solid var(--
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* === 按鈕與輸入框 (Touch-friendly) === */
+/* === 頂部導航與通用排版類別 === */
+.top-bar-container { display: flex; justify-content: space-between; align-items: center; }
+.char-hp-group { display: flex; align-items: center; white-space: nowrap; }
+.char-select-btn { font-size: 1.1em; font-weight: bold; padding: 6px 12px; margin-right: 10px; border-radius: 6px; border: 1px solid #666; background: #222; color: #fff; }
+.hp-label { font-size: 1.2em; font-weight: bold; }
+.hp-value { font-size: 1.5em; margin: 0 10px; }
+.action-btn { padding: 10px; margin-right: 5px; }
+.action-btn-no-margin { padding: 10px; }
+
+/* === 按鈕與輸入框 === */
 button {
   background-color: var(--primary);
   color: white;
@@ -76,7 +85,15 @@ input[type="text"], input[type="password"], select {
   min-height: 44px;
 }
 
-/* === 戰況異常狀態網格 (一排 4 個，雙行字體) === */
+/* === 表單與大按鈕 === */
+.form-group-label { display: block; margin-top: 15px; }
+.form-group-label-small { display: block; margin-top: 10px; }
+.form-checkbox-label { display: block; margin-bottom: 10px; }
+.custom-select { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #555; background: #333; color: white; }
+.btn-large-primary { width: 100%; font-size: 1.2em; padding: 15px; margin: 10px 0 0 0; }
+.btn-export { width: 100%; margin-bottom: 15px; background: var(--positive); color: #000; }
+
+/* === 戰況異常狀態網格 === */
 .negative-label { color: var(--negative); font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; }
 .positive-label { color: var(--positive); font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; }
 
@@ -100,174 +117,93 @@ input[type="text"], input[type="password"], select {
   min-height: 44px;
   border: 1px solid transparent;
 }
-
-/* 隱藏原生勾選框 */
-.conditions-grid input[type="checkbox"] {
-  display: none;
-}
-
-/* 負面狀態選取變色 (深紅底、紅框、紅字) */
-.negative-label + .conditions-grid label:has(input:checked) {
-  background-color: #3b1f1f;
-  border-color: var(--danger);
-}
-.negative-label + .conditions-grid label:has(input:checked) .cond-zh,
-.negative-label + .conditions-grid label:has(input:checked) .cond-en {
-  color: var(--negative);
-}
-
-/* 正面狀態選取變色 (深藍底、藍框、藍字) */
-.positive-label + .conditions-grid label:has(input:checked) {
-  background-color: #1a2e3f;
-  border-color: var(--positive);
-}
-.positive-label + .conditions-grid label:has(input:checked) .cond-zh,
-.positive-label + .conditions-grid label:has(input:checked) .cond-en {
-  color: var(--positive);
-}
-
+.conditions-grid input[type="checkbox"] { display: none; }
+.negative-label + .conditions-grid label:has(input:checked) { background-color: #3b1f1f; border-color: var(--danger); }
+.negative-label + .conditions-grid label:has(input:checked) .cond-zh, .negative-label + .conditions-grid label:has(input:checked) .cond-en { color: var(--negative); }
+.positive-label + .conditions-grid label:has(input:checked) { background-color: #1a2e3f; border-color: var(--positive); }
+.positive-label + .conditions-grid label:has(input:checked) .cond-zh, .positive-label + .conditions-grid label:has(input:checked) .cond-en { color: var(--positive); }
 .conditions-grid label:active { background: var(--secondary-hover); }
 .cond-zh { font-size: 0.85em; font-weight: bold; }
 .cond-en { font-size: 0.65em; color: #999; }
 
-/* === 戰場元素狀態網格 (一排 3 個) === */
-.elements-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 20px;
-}
-.element-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 8px;
-  border-radius: 6px;
-  border: none;
-  font-size: 0.9rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
+/* === 戰場元素狀態網格 === */
+.elements-title { color: var(--accent); margin-top: 20px; font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; }
+.elements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.element-btn { display: flex; justify-content: space-between; align-items: center; padding: 10px 8px; border-radius: 6px; border: none; font-size: 0.9rem; cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
 .element-btn.inert { background: #2d2d2d; color: #777; }
 .element-btn.waning { background: #8B6508; color: #fff; }
-.element-btn.strong { background: #ff9800; color: #fff; box-shadow: 0 0 8px rgba(255, 152, 0, 0.5); }
+.element-btn.strong { background: var(--accent); color: #fff; box-shadow: 0 0 8px rgba(255, 152, 0, 0.5); }
 .el-state { font-size: 0.8em; opacity: 0.9; }
 
 /* === 角色專屬機制 (Tracker) 樣式 === */
-.tracker-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--secondary);
-  padding: 10px 14px;
-  margin-top: 8px;
-  border-radius: 6px;
-}
+.mechanics-container { margin-top: 10px; }
+.tracker-row { display: flex; justify-content: space-between; align-items: center; background: var(--secondary); padding: 10px 14px; margin-top: 8px; border-radius: 6px; }
 .tracker-name { font-size: 0.95rem; font-weight: bold; }
 .tracker-controls { display: flex; align-items: center; }
-.tracker-controls button {
-  padding: 0;
-  width: 36px;
-  height: 36px;
-  min-height: 36px;
-  margin: 0 8px;
-  background: #555;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  line-height: 1;
-}
+.tracker-controls button { padding: 0; width: 36px; height: 36px; min-height: 36px; margin: 0 8px; background: #555; border-radius: 50%; font-size: 1.2rem; line-height: 1; }
 .tracker-warning { color: var(--danger); font-weight: bold; }
 
 /* === AI 決策卡牌展示 === */
+.initiative-text { color: var(--accent); font-size: 0.9em; }
 .card-display { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-.card-slot {
-  background: #121419;
-  border-left: 5px solid var(--primary);
-  padding: 14px;
-  border-radius: 6px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-}
-.reasoning-box {
-  background: var(--secondary);
-  padding: 14px;
-  border-radius: 6px;
-  font-style: italic;
-  margin-top: 15px;
-  color: #c5cbe3;
-  border-left: 3px solid var(--accent);
-}
+.card-slot { background: #121419; border-left: 5px solid var(--primary); padding: 14px; border-radius: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+.reasoning-box { background: var(--secondary); padding: 14px; border-radius: 6px; font-style: italic; margin-top: 15px; color: #c5cbe3; border-left: 3px solid var(--accent); }
+.raw-json-box { background: #111; padding: 10px; margin-top: 15px; font-size: 0.8em; overflow-x: auto; color: #888; }
 
-/* === 全域狀態同步面板與設定面板 === */
-.modal-content {
-  background: var(--panel-bg);
-  padding: 20px;
-  border-radius: 12px;
-  width: 92%;
-  max-width: 500px;
-  border: 1px solid var(--panel-border);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-}
-.zone-container {
-  margin-bottom: 16px;
-  background: #121419;
-  padding: 12px;
-  border-radius: 8px;
-}
-.zone-title {
-  font-weight: bold;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--panel-border);
-  padding-bottom: 6px;
-  color: var(--accent);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.mini-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--secondary);
-  padding: 10px;
-  margin-bottom: 6px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-}
-.mini-card select {
-  width: auto;
-  margin: 0;
-  padding: 6px 30px 6px 10px;
-  min-height: 36px;
-  background-color: var(--bg-color);
-}
+/* === 全域 Modal 與設定面板 === */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; overflow-y: auto; padding: 20px 0; }
+.modal-overlay-dark { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1050; overflow-y: auto; padding: 20px 0; }
+.modal-overlay-centered { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1100; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+.modal-scroll-container { display: flex; justify-content: center; align-items: flex-start; min-height: 100%; }
+
+.modal-content { background: var(--panel-bg); padding: 20px; border-radius: 12px; width: 92%; max-width: 500px; border: 1px solid var(--panel-border); box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.modal-title { margin: 0; }
+
+.btn-info-sm { background: var(--positive); color: #000; font-size: 0.85em; padding: 8px 12px; margin: 0 8px 0 0; }
+.btn-secondary-sm { font-size: 0.85em; padding: 8px 12px; margin: 0; }
+.no-margin { margin: 0; }
+.mb-20 { margin-bottom: 20px; }
+.mb-10 { margin-bottom: 10px; }
+.d-block { display: block; }
+.w-100 { width: 100%; }
+
+/* --- 狀態面板特規 --- */
+.zone-container { margin-bottom: 16px; background: #121419; padding: 12px; border-radius: 8px; }
+.zone-title { font-weight: bold; margin-bottom: 12px; border-bottom: 1px solid var(--panel-border); padding-bottom: 6px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
+.btn-recover { font-size: 0.8em; padding: 4px 8px; margin: 0; }
+.mini-card { display: flex; justify-content: space-between; align-items: center; background: var(--secondary); padding: 10px; margin-bottom: 6px; border-radius: 6px; font-size: 0.95rem; }
+.mini-card select { width: auto; margin: 0; padding: 6px 30px 6px 10px; min-height: 36px; background-color: var(--bg-color); }
+
+/* --- 設定面板特規 --- */
+.settings-section-title { margin-top: 15px; color: var(--primary); }
+.settings-card { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid var(--panel-border); margin-bottom: 15px; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; }
+.settings-label { font-size: 0.9em; font-weight: bold; margin: 0; }
+.settings-input-number { width: 80px; margin: 0; text-align: center; font-size: 1.1em; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 6px; }
+.file-input { width: 100%; margin-bottom: 10px; color: #fff; }
 
 /* === 攜帶卡牌管理 (Deck Builder) === */
-.deck-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-.deck-card-btn {
-  background: var(--secondary);
-  border: 2px solid transparent;
-  border-radius: 6px;
-  padding: 12px 8px;
-  color: var(--text-muted);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.deck-card-btn.selected {
-  background: #1a2e3f;
-  border-color: var(--positive);
-  color: var(--text-main);
-  box-shadow: 0 0 8px rgba(77, 171, 247, 0.3);
-}
+.deck-limit-box { text-align: center; font-size: 1.1em; font-weight: bold; margin-bottom: 15px; background: #1a1a1a; padding: 10px; border-radius: 8px; color: #fff; }
+.deck-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.deck-card-btn { background: var(--secondary); border: 2px solid transparent; border-radius: 6px; padding: 12px 8px; color: var(--text-muted); text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 4px; }
+.deck-card-btn.selected { background: #1a2e3f; border-color: var(--positive); color: var(--text-main); box-shadow: 0 0 8px rgba(77, 171, 247, 0.3); }
 .deck-card-btn .lvl { font-size: 0.85em; font-weight: bold; color: var(--accent); }
 .deck-card-btn .name { font-size: 0.95em; font-weight: bold; }
 .deck-card-btn .init { font-size: 0.75em; opacity: 0.7; }
 .limit-warning { color: var(--danger) !important; }
+
+/* === 角色切換面板 === */
+.char-modal-box { width: 90%; max-width: 350px; border: 1px solid #4a4a4a; }
+.char-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.char-btn { padding: 15px 5px; font-weight: bold; font-size: 1.05em; line-height: 1.2; }
+.char-btn-sub { font-weight: normal; opacity: 0.8; display: block; font-size: 0.8em; margin-top: 4px; }
+.active-char { border: 2px solid var(--primary) !important; background: #292929 !important; color: #fff !important; }
+.active-char-indicator { font-size: 0.7em; color: var(--primary); margin-top: 5px; }
+
+/* === 文字共用類別 === */
+.text-warning { color: var(--accent); }
+.text-info { color: var(--positive); }
+.text-success { color: var(--primary); }
+.text-white { color: #fff; }
+.text-muted-small { font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px; }
