@@ -162,13 +162,13 @@
       </div>
       
       <!-- 2x2 網格 -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
         <button onclick="switchCharacter('drifter')" id="char-btn-drifter" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Drifter<br><small style="font-weight: normal; opacity: 0.8;">流浪者</small></button>
         <button onclick="switchCharacter('blinkblade')" id="char-btn-blinkblade" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Blinkblade<br><small style="font-weight: normal; opacity: 0.8;">閃刃</small></button>
         <button onclick="switchCharacter('geminate')" id="char-btn-geminate" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Geminate<br><small style="font-weight: normal; opacity: 0.8;">雙生體</small></button>
-        <!-- 預留空位 
+        <!-- 預留空位 -->
         <button onclick="switchCharacter('deathwalker')" id="char-btn-deathwalker" style="padding: 15px 5px; font-weight: bold; font-size: 1.05em;">Deathwalker<br><small style="font-weight: normal; opacity: 0.8;">死靈行者</small></button>
-	-->
+	
       </div>
     </div>
   </div>
@@ -185,10 +185,10 @@
       const activeBtn = document.getElementById('char-btn-' + currentClass);
       if (activeBtn) {
         activeBtn.style.border = '2px solid #4CAF50';
-        activeBtn.style.background = '#1a3320';
+        activeBtn.style.background = '#292929';
         activeBtn.style.color = '#fff';
         activeBtn.disabled = true; // 禁用當前按鈕防止誤觸
-        activeBtn.innerHTML += '<div style="font-size: 0.7em; color: #4CAF50; margin-top: 5px;">📍 當前選擇</div>';
+        // activeBtn.innerHTML += '<div style="font-size: 0.7em; color: #4CAF50; margin-top: 5px;">📍 當前選擇</div>';
       }
 
       // 綁定視窗開關
