@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const config = window.characterConfig || {};
   const cardsDb = window.cardsDatabase || [];
   if (config.class_name) {
-    document.getElementById('character-name-display').innerText = `${config.class_name} HP: `;
+    document.getElementById('character-name-display').innerText = config.class_name;
   }
 
   // 【新增】動態套用角色專屬主題色
