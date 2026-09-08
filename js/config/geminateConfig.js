@@ -15,6 +15,16 @@ window.characterConfig = {
     "--secondary": "#4a0d23",        /* 深邃的暗洋紅次要按鈕 */
     "--secondary-hover": "#6e1435"   /* 懸停時呈現指定的洋紅質感 */
   },
+
+  // 戰術標籤
+  "quick_tags": [
+    "戰前整備", 
+    "快速移動", 
+    "全力攻擊", 
+    "輔助隊友", 
+    "控制敵人", 
+    "戰後休整"
+  ],
   
   "ui_modules": {
     "current_form": {

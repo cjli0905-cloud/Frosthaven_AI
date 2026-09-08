@@ -16,6 +16,16 @@ window.characterConfig = {
     "--secondary": "#1f4a63",        /* 偏青色的次要按鈕 */
     "--secondary-hover": "#2d6687"   /* 提亮後的青灰色懸停 */
   },
+
+  // 戰術標籤
+  "quick_tags": [
+    "戰前整備", 
+    "快速移動", 
+    "全力攻擊", 
+    "輔助隊友", 
+    "控制敵人", 
+    "戰後休整"
+  ],
   
   "ui_modules": {
     "time_tokens": {

@@ -206,9 +206,32 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCloseSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
   settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) settingsModal.classList.add('hidden'); });
 
-  function updateHpDisplay() { hpDisplay.innerText = `${currentHp} / ${maxHp}`; }
-  btnHpMinus.addEventListener('click', () => { if (currentHp > 0) currentHp--; updateHpDisplay(); });
-  btnHpPlus.addEventListener('click', () => { if (currentHp < maxHp) currentHp++; updateHpDisplay(); });
+  // 血量增減邏輯
+  function updateHpDisplay() { ... }
+  btnHpMinus.addEventListener('click', () => { ... });
+  btnHpPlus.addEventListener('click', () => { ... });
+
+  // 【新增】動態渲染快捷標籤
+  const quickTagsContainer = document.getElementById('quick-tags-container');
+  const selectedTags = new Set();
+
+  if (config.quick_tags && config.quick_tags.length > 0 && quickTagsContainer) {
+    config.quick_tags.forEach(tag => {
+      const btn = document.createElement('div');
+      btn.className = 'quick-tag-btn';
+      btn.innerText = tag;
+      btn.addEventListener('click', () => {
+        if (selectedTags.has(tag)) {
+          selectedTags.delete(tag);
+          btn.classList.remove('active');
+        } else {
+          selectedTags.add(tag);
+          btn.classList.add('active');
+        }
+      });
+      quickTagsContainer.appendChild(btn);
+    });
+  }
 
   // --- 存檔與讀檔核心邏輯 ---
   function createSaveData() {
@@ -388,12 +411,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   btnAskAi.addEventListener('click', async () => {
-    const directive = document.getElementById('player-directive').value.trim();
+    const rawDirective = document.getElementById('player-directive').value.trim();
     const apiKey = document.getElementById('api-key').value.trim();
     const canRest = document.getElementById('flag-can-rest').checked;
     const selectedModel = document.getElementById('ai-model-select').value;
 
-    if (!directive) return alert("請輸入行動方針！");
+    // 【新增】將點選的標籤與輸入框的文字合併
+    const tagsString = Array.from(selectedTags).map(t => `[${t}]`).join(' ');
+    const finalDirective = `${tagsString} ${rawDirective}`.trim();
+
+    // 【修改】防呆條件放寬：只要有選標籤「或」有打字都可以
+    if (!finalDirective) return alert("請選擇快捷標籤，或輸入行動方針！");
     if (!apiKey) return alert("請貼上你的 API Key！");
 
     // 每次請求 AI 時自動寫入【該角色專屬】快取
@@ -436,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
           cards: { hand: currentHand, discard: currentDiscard, lost: currentLost, active_buffs: currentActive },
           items: []
         },
-        battlefield: { elements: elementData, turn_input: { player_directive: directive, strategy_flags: { can_rest_if_needed: canRest } } }
+        battlefield: { elements: elementData, turn_input: { player_directive: finalDirective, strategy_flags: { can_rest_if_needed: canRest } } }
       };
 
       const client = new GeminiClient(apiKey, selectedModel);

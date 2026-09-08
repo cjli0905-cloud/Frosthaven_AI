@@ -207,3 +207,10 @@ input[type="text"], input[type="password"], select {
 .text-success { color: var(--primary); }
 .text-white { color: #fff; }
 .text-muted-small { font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px; }
+
+/* === 快捷標籤 (Quick Tags) === */
+.directive-header { margin-top: 15px; }
+.directive-header .form-group-label { margin-top: 0; margin-bottom: 8px; }
+.quick-tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.quick-tag-btn { background: var(--secondary); color: var(--text-muted); border: 1px solid var(--panel-border); padding: 6px 12px; border-radius: 20px; font-size: 0.85em; cursor: pointer; transition: all 0.2s; user-select: none; }
+.quick-tag-btn.active { background: var(--primary); color: #fff; border-color: var(--primary-hover); box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); }

@@ -59,8 +59,12 @@
       <button id="btn-el-dark" class="element-btn inert">🌑 暗 <span class="el-state">惰性</span></button>
     </div>
 
-    <label class="form-group-label">你的行動方針 (自然語言):</label>
-    <input type="text" id="player-directive" placeholder="例如：打爆前面那隻，盡量回血">
+    <!-- 快捷標籤容器與文字輸入框 -->
+    <div class="directive-header">
+      <label class="form-group-label">你的行動方針 (自然語言):</label>
+      <div id="quick-tags-container" class="quick-tags-container"></div>
+    </div>
+    <input type="text" id="player-directive" placeholder="例如：打爆前面那隻，盡量回血，或直接點擊上方標籤">
     
     <label class="form-checkbox-label">
       <input type="checkbox" id="flag-can-rest"> 戰況寬裕，可視情況休整

@@ -15,6 +15,16 @@ window.characterConfig = {
     "--secondary-hover": "#544c45"   /* 略亮的泥灰色懸停 */
   },
 
+  // 戰術標籤
+  "quick_tags": [
+    "戰前整備", 
+    "快速移動", 
+    "全力攻擊", 
+    "輔助隊友", 
+    "控制敵人", 
+    "戰後休整"
+  ],
+
   
   // 提供給 drifterUI.js 使用的靜態設定
   "trackers_mapping": {
