@@ -211,12 +211,12 @@ document.addEventListener('DOMContentLoaded', () => {
   btnHpMinus.addEventListener('click', () => { if (currentHp > 0) currentHp--; updateHpDisplay(); });
   btnHpPlus.addEventListener('click', () => { if (currentHp < maxHp) currentHp++; updateHpDisplay(); });
 
-  // 【新增】動態渲染快捷標籤
+  // 【新增】動態渲染快捷標籤 (字典架構版)
   const quickTagsContainer = document.getElementById('quick-tags-container');
   const selectedTags = new Set();
 
-  if (config.quick_tags && config.quick_tags.length > 0 && quickTagsContainer) {
-    config.quick_tags.forEach(tag => {
+  if (config.quick_tags && quickTagsContainer) {
+    Object.keys(config.quick_tags).forEach(tag => {
       const btn = document.createElement('div');
       btn.className = 'quick-tag-btn';
       btn.innerText = tag;
@@ -416,13 +416,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const canRest = document.getElementById('flag-can-rest').checked;
     const selectedModel = document.getElementById('ai-model-select').value;
 
-    // 【新增】將點選的標籤與輸入框的文字合併
+    // 【新增】將點選的標籤與輸入框的文字合併，並動態注入標籤含義
     const tagsString = Array.from(selectedTags).map(t => `[${t}]`).join(' ');
     const finalDirective = `${tagsString} ${rawDirective}`.trim();
 
     // 【修改】防呆條件放寬：只要有選標籤「或」有打字都可以
     if (!finalDirective) return alert("請選擇快捷標籤，或輸入行動方針！");
     if (!apiKey) return alert("請貼上你的 API Key！");
+
+    // 動態提取並組裝標籤詳細含義，改用 config 讀取
+    if (selectedTags.size > 0) {
+      const activeTagRules = Array.from(selectedTags)
+        .map(tag => `- ${tag}：${config.quick_tags[tag]}`)
+        .join('\n');
+      finalDirective += `\n\n【當下戰略標籤指示】\n${activeTagRules}`;
+    }
 
     // 每次請求 AI 時自動寫入【該角色專屬】快取
     localStorage.setItem(saveKey, JSON.stringify(createSaveData()));
