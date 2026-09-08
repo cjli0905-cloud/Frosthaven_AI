@@ -418,7 +418,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 【新增】將點選的標籤與輸入框的文字合併，並動態注入標籤含義
     const tagsString = Array.from(selectedTags).map(t => `[${t}]`).join(' ');
-    let finalDirective = `${tagsString} ${rawDirective}`.trim();
+    let finalDirective = "";
+    if (rawDirective) {
+      finalDirective += `【啟用戰術標籤】：${tagsString}\n`;
+    }
+    if (tagsString) {
+      finalDirective += `【玩家手動指示】：${rawDirective}\n`;
+    }
 
     // 【修改】防呆條件放寬：只要有選標籤「或」有打字都可以
     if (!finalDirective) return alert("請選擇快捷標籤，或輸入行動方針！");
@@ -429,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeTagRules = Array.from(selectedTags)
         .map(tag => `- ${tag}：${config.quick_tags[tag]}`)
         .join('\n');
-      finalDirective += `\n\n【當下戰略標籤指示】\n${activeTagRules}`;
+      finalDirective += `\n\n(系統輔助說明：以下為標籤的底層原則，請與【玩家手動指示】一併加入決策考量。若【戰術標籤】與【玩家手動指示】無法同時滿足，則以【玩家手動指示】為主。)\n${activeTagRules}`;
     }
 
     // 每次請求 AI 時自動寫入【該角色專屬】快取
