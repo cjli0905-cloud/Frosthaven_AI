@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAskAi = document.getElementById('btn-ask-ai');
   const resultPanel = document.getElementById('result-panel');
   const rawOutput = document.getElementById('raw-json-output');
+  const btnTogglePrompt = document.getElementById('btn-toggle-prompt');
+  const rawPromptOutput = document.getElementById('raw-prompt-output');
 
   const btnOpenDeckBuilder = document.getElementById('btn-open-deck-builder');
   const btnCloseDeckBuilder = document.getElementById('btn-close-deck-builder');
@@ -210,6 +212,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateHpDisplay() { hpDisplay.innerText = `${currentHp} / ${maxHp}`; }
   btnHpMinus.addEventListener('click', () => { if (currentHp > 0) currentHp--; updateHpDisplay(); });
   btnHpPlus.addEventListener('click', () => { if (currentHp < maxHp) currentHp++; updateHpDisplay(); });
+
+  // 【新增】Prompt 摺疊按鈕邏輯
+  if (btnTogglePrompt && rawPromptOutput) {
+    btnTogglePrompt.addEventListener('click', () => {
+      rawPromptOutput.classList.toggle('hidden');
+      const isHidden = rawPromptOutput.classList.contains('hidden');
+      btnTogglePrompt.innerText = isHidden ? "🔍 檢視打包給 AI 的完整 Prompt" : "收起 Prompt";
+    });
+  }
 
   // 【新增】動態渲染快捷標籤 (字典架構版)
   const quickTagsContainer = document.getElementById('quick-tags-container');
@@ -484,8 +495,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const client = new GeminiClient(apiKey, selectedModel);
       const prompt = buildPrompt(currentState, cardsDb, config);
 
-      // 【新增這行】將最終打包好的 Prompt 印在控制台
-      console.log("【打包給 AI 的完整 Prompt】\n", prompt);
+      // 【新增】將 Prompt 印到前端隱藏區塊，並在每次重新決策時預設收起
+      if (rawPromptOutput) {
+        rawPromptOutput.innerText = prompt;
+        rawPromptOutput.classList.add('hidden');
+        if (btnTogglePrompt) btnTogglePrompt.innerText = "🔍 檢視打包給 AI 的完整 Prompt";
+      }
 
       const result = await client.getAiDecision(prompt);
       
