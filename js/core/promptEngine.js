@@ -66,8 +66,8 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
      - 打出的兩張牌中，選擇其中一張牌的先攻值。先攻值決定了這回合的行動優先順序，數字越小有越高的機會優先行動。
   2. 基本行動 (Basic Actions)：如果卡牌上半部或下半部的行動不適合使用時，要記得還有基本行動可以選擇：卡牌的上半部可以當成攻擊2、卡牌的下半部可以當成移動2。
   3. 流失卡控管 (Lost Cards)：
-     - 【單次爆發流失卡】(is_lost: true 且 is_persistent: false)：前期 (手牌 >= 8) 嚴禁使用，除非能帶來決定性戰略優勢。
-     - 【持續效果 Buff 卡】(is_lost: true 且 is_persistent: true)：【強烈鼓勵】在遊戲前期優先打出 1~2 張來建立核心 Buff！不要因為它們會流失就捨不得用，這是角色發揮戰力的關鍵。
+     - 【單次爆發流失卡】(is_lost: true 且 is_persistent: false)：前期 (流失區卡牌數量 <= 2) 嚴禁使用，除非能帶來決定性戰略優勢。
+     - 【持續效果 Buff 卡】(is_lost: true 且 is_persistent: true)：除非玩家特別指示，否則前期(流失區卡牌數量 <= 2)盡量不要讓持續效果區卡牌數量 >2。後期 (可用手牌+棄牌堆卡牌數量 <= 5) 嚴禁使用，除非能帶來決定性戰略優勢。
   4. 遠程攻擊劣勢 (Ranged Disadvantage)：【極度重要】除非沒有其他選擇，否則請盡力避免使用遠程攻擊 (Ranged Attack) 打擊相鄰 (距離 1) 的敵人，因為這會導致劣勢。若玩家方針指定目標距離為 1，請優先挑選近戰攻擊 (Melee Attack)，或者先安排移動 (Move) 拉開距離後再進行遠程攻擊。 (唯一例外：處於混亂狀態時，可忽略此規則，因為無論如何都處劣勢。)
   5. 主動隱形戰術 (Invisibility Timing)：如果卡牌的行動能為自己附加隱形 (Invisible) 狀態，代表行動後將處於絕對安全。此時請優先搭配【先攻值極低 (數字小、行動快)】的卡牌，藉此搶先在怪物攻擊前行動並進入隱形，完美規避傷害。
   6. 持續效果連動 (Active Buffs Synergy)：【極度重要】請務必檢查上方的【當前持續效果區 (Active Buffs)】陣列。這裡列出的卡牌代表你當下正享有的常駐增益（無論該職業是否有實體指示物/刻度）。請精準以"is_persistent": true來判斷是該卡牌的上半部還是下半部為常駐增益的確切內容。決策時，請務必將這些常駐增益的加成一併納入考量，極大化你的戰術優勢。
@@ -93,7 +93,8 @@ function buildPrompt(gameState, cardsDatabase, characterConfig) {
 專屬機制狀態: ${JSON.stringify(gameState.character.class_mechanics)}
 
 【玩家方針與戰略目標】
-玩家自然語言方針: "${gameState.battlefield.turn_input.player_directive}"
+${gameState.battlefield.turn_input.player_directive}
+
 允許系統建議休整: ${canRest}
 
 ${genericHeuristics}
@@ -102,7 +103,7 @@ ${activeConditionsText}
 ${classHeuristics}
 
 【決策邏輯指示】
-1. 仔細閱讀玩家的自然語言方針，這是這回合最高的戰略目標。
+1. 仔細閱讀【玩家方針與戰略目標】內容，這是這回合的戰略目標。將【戰術標籤】與【玩家手動指示】一併加入決策考量。若【戰術標籤】與【玩家手動指示】無法同時滿足，則以【玩家手動指示】為主。
 2. 【距離與位移判定】：從玩家的方針中，分析出所需的「移動距離」與「攻擊目標距離/數量」。確保你挑選的卡牌組合（包含裝備補足）能盡量達成這些條件。
 3. 若允許休整 (${canRest}) 為 false，無論如何都必須生出兩張牌。若為 true，則進行以下判斷：
    - 若你判斷手牌或血量見底，你可以直接建議 LONG_REST。

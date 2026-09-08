@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeTagRules = Array.from(selectedTags)
         .map(tag => `- ${tag}：${config.quick_tags[tag]}`)
         .join('\n');
-      finalDirective += `\n\n(系統輔助說明：以下為標籤的底層原則，請與【玩家手動指示】一併加入決策考量。若【戰術標籤】與【玩家手動指示】無法同時滿足，則以【玩家手動指示】為主。)\n${activeTagRules}`;
+      finalDirective += `(以下為【戰術標籤】的底層原則)\n${activeTagRules}`;
     }
 
     // 每次請求 AI 時自動寫入【該角色專屬】快取
@@ -483,6 +483,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const client = new GeminiClient(apiKey, selectedModel);
       const prompt = buildPrompt(currentState, cardsDb, config);
+
+      // 【新增這行】將最終打包好的 Prompt 印在控制台
+      console.log("【打包給 AI 的完整 Prompt】\n", prompt);
+
       const result = await client.getAiDecision(prompt);
       
       renderAiDecision(result);
