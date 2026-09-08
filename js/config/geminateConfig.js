@@ -24,7 +24,7 @@ window.characterConfig = {
     "輔助隊友": "隊友需要支援。優先挑選能對盟友進行治療 (Heal)、給予護盾 (Shield) 或賦予增益的卡牌。",
     "控制敵人": "減輕前線壓力。優先挑選能造成暈眩 (Stun)、繳械 (Disarm)、或定身 (Immobilize) 的卡牌。",
     "戰後收尾": "敵人已被清光。優先執行拾取 (Loot)或自補，【盡量避免】打出單次流失卡。"
-  }
+  },
   
   "ui_modules": {
     "current_form": {

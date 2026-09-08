@@ -25,7 +25,7 @@ window.characterConfig = {
     "風箏戰術": "選取先攻值高的卡牌，攻擊完敵人後馬上後退。",
     "控制敵人": "減輕前線壓力。優先挑選能造成暈眩 (Stun)、繳械 (Disarm)、或定身 (Immobilize) 的卡牌。",
     "戰後收尾": "敵人已被清光。優先執行拾取 (Loot)或自補，【盡量避免】打出單次流失卡。"
-  }
+  },
   
   "ui_modules": {
     "time_tokens": {
