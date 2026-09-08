@@ -215,12 +215,26 @@ input[type="text"], input[type="password"], select {
 .quick-tag-btn { background: var(--secondary); color: var(--text-muted); border: 1px solid var(--panel-border); padding: 6px 12px; border-radius: 20px; font-size: 0.85em; cursor: pointer; transition: all 0.2s; user-select: none; }
 .quick-tag-btn.active { background: var(--primary); color: #fff; border-color: var(--primary-hover); box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); }
 
-/* === AI Prompt 檢視區塊 === */
-.prompt-toggle-btn {
-  width: 100%;
+/* === AI Prompt 檢視與複製區塊 === */
+.prompt-action-group {
+  display: flex;
+  gap: 8px;
   margin-top: 10px;
+}
+
+.prompt-toggle-btn {
+  flex-grow: 1;
   font-size: 0.85em;
   padding: 8px;
+  margin-top: 0;
+}
+
+.prompt-copy-btn {
+  font-size: 0.85em;
+  padding: 8px 12px;
+  white-space: nowrap;
+  margin-top: 0;
+  transition: all 0.3s ease;
 }
 
 .raw-prompt-box {

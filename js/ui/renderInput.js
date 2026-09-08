@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const rawOutput = document.getElementById('raw-json-output');
   const btnTogglePrompt = document.getElementById('btn-toggle-prompt');
   const rawPromptOutput = document.getElementById('raw-prompt-output');
+  // 【新增】抓取複製按鈕
+  const btnCopyPrompt = document.getElementById('btn-copy-prompt');
 
   const btnOpenDeckBuilder = document.getElementById('btn-open-deck-builder');
   const btnCloseDeckBuilder = document.getElementById('btn-close-deck-builder');
@@ -213,12 +215,43 @@ document.addEventListener('DOMContentLoaded', () => {
   btnHpMinus.addEventListener('click', () => { if (currentHp > 0) currentHp--; updateHpDisplay(); });
   btnHpPlus.addEventListener('click', () => { if (currentHp < maxHp) currentHp++; updateHpDisplay(); });
 
-  // 【新增】Prompt 摺疊按鈕邏輯
+  // 【修改】Prompt 摺疊與複製邏輯
   if (btnTogglePrompt && rawPromptOutput) {
     btnTogglePrompt.addEventListener('click', () => {
       rawPromptOutput.classList.toggle('hidden');
       const isHidden = rawPromptOutput.classList.contains('hidden');
       btnTogglePrompt.innerText = isHidden ? "🔍 檢視打包給 AI 的完整 Prompt" : "收起 Prompt";
+      
+      // 同步顯示或隱藏複製按鈕
+      if (btnCopyPrompt) {
+        if (isHidden) btnCopyPrompt.classList.add('hidden');
+        else btnCopyPrompt.classList.remove('hidden');
+      }
+    });
+  }
+
+  if (btnCopyPrompt && rawPromptOutput) {
+    btnCopyPrompt.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(rawPromptOutput.innerText);
+        
+        // 視覺回饋：變綠色並顯示已複製
+        const originalText = btnCopyPrompt.innerText;
+        btnCopyPrompt.innerText = "✅ 已複製！";
+        btnCopyPrompt.style.background = "#4CAF50";
+        btnCopyPrompt.style.color = "#fff";
+        btnCopyPrompt.style.borderColor = "#4CAF50";
+        
+        // 2 秒後恢復原狀
+        setTimeout(() => {
+          btnCopyPrompt.innerText = originalText;
+          btnCopyPrompt.style.background = "";
+          btnCopyPrompt.style.color = "";
+          btnCopyPrompt.style.borderColor = "";
+        }, 2000);
+      } catch (err) {
+        alert("複製失敗，請手動全選複製。");
+      }
     });
   }
 
@@ -500,6 +533,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rawPromptOutput.innerText = prompt;
         rawPromptOutput.classList.add('hidden');
         if (btnTogglePrompt) btnTogglePrompt.innerText = "🔍 檢視打包給 AI 的完整 Prompt";
+        // 【新增】確保重新決策時隱藏複製按鈕
+        if (btnCopyPrompt) btnCopyPrompt.classList.add('hidden'); 
       }
 
       const result = await client.getAiDecision(prompt);
