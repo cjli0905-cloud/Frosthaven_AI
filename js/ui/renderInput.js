@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 【新增】將點選的標籤與輸入框的文字合併，並動態注入標籤含義
     const tagsString = Array.from(selectedTags).map(t => `[${t}]`).join(' ');
-    const finalDirective = `${tagsString} ${rawDirective}`.trim();
+    let finalDirective = `${tagsString} ${rawDirective}`.trim();
 
     // 【修改】防呆條件放寬：只要有選標籤「或」有打字都可以
     if (!finalDirective) return alert("請選擇快捷標籤，或輸入行動方針！");
