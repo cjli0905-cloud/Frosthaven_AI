@@ -207,9 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
   settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) settingsModal.classList.add('hidden'); });
 
   // 血量增減邏輯
-  function updateHpDisplay() { ... }
-  btnHpMinus.addEventListener('click', () => { ... });
-  btnHpPlus.addEventListener('click', () => { ... });
+  function updateHpDisplay() { hpDisplay.innerText = `${currentHp} / ${maxHp}`; }
+  btnHpMinus.addEventListener('click', () => { if (currentHp > 0) currentHp--; updateHpDisplay(); });
+  btnHpPlus.addEventListener('click', () => { if (currentHp < maxHp) currentHp++; updateHpDisplay(); });
 
   // 【新增】動態渲染快捷標籤
   const quickTagsContainer = document.getElementById('quick-tags-container');
